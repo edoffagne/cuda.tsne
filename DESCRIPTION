@@ -1,0 +1,10 @@
+Package: cuda.tsne
+Type: Package
+Title: Cuda implementation of t-SNE
+Version: 0.1
+Date: 2017-10-28
+Author: Erik Doffagne [aut, cre], George Dimitriadis [aut] (Author of the Python and  C++ code), Laurens van der Maaten [cph] (Author of original C++ code)
+Maintainer: Erik Doffagne <erik.doffagne@gmail.com>
+Description: This is a CUDA extension of the C++ t-sne with barnes-hut algorithm written by Laurens van der Maaten
+License: MIT + License
+Imports: reticulate
