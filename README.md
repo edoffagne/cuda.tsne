@@ -2,7 +2,7 @@
 
 ## Introduction
 
-*Disclaimer*: This project is a work in progress and is not yet stable.
+**Disclaimer** : This project is a work in progress and is not yet stable.
 
 Wrapper for a CUDA implementation of Barnes-Hut t-Distributed Stochastic Neighbor Embedding (t-SNE).
 t-SNE is a technique for dimensionality reduction that is particularly well suited for the
