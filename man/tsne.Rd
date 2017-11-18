@@ -40,12 +40,15 @@ Research, 9, pp.2579-2605.
 
 \examples{
 
+\dontrun{
 iris_unique = unique(iris)
 iris_matrix = as.matrix(iris_unique[,1:4])
 ydata = tsne(iris_matrix) # Run TSNE
 
 # Show the objects in the 2D tsne representation
 plot(ydata,col=iris_unique$Species)
+}
+
 
 }
 \keyword{ ~kwd1 }% use one of  RShowDoc("KEYWORDS")
