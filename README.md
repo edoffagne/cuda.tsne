@@ -1,5 +1,8 @@
 # Cuda Implementation of t-SNE
 
+
+[![Build Status](https://travis-ci.org/erikdf/cuda.tsne.svg?branch=master)](https://travis-ci.org/erikdf/cuda.tsne)
+
 ## Introduction
 
 **Disclaimer** : This project is a work in progress and is not yet stable.
