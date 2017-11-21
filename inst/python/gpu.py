@@ -100,7 +100,7 @@ def _segment_sort_transposed_distances_get_knns(num_of_neighbours, distances_on_
 
 def calculate_knn_distances(template_features_sparse_clean, perplexity=100, mem_usage=0.9, verbose=True):
     start = timer()
-    num_of_neighbours = perplexity * 3 + 1
+    num_of_neighbours = int(perplexity * 3 + 1)
     m = template_features_sparse_clean.shape[0]
 
     closest_indices = np.empty((m, num_of_neighbours))
