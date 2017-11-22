@@ -27,7 +27,8 @@ This part is performed in C++ (with only one core).
 
 [The Street View House Numbers (SVHN) Dataset](http://ufldl.stanford.edu/housenumbers/) has been used for the benchmark.
 The dataset contains 73,257 images (32x32 RGB) obtained from house numbers in Google Street View images. 
-A convolutional network has been used to extract input features for the t-SNE algorithm.
+A convolutional network has been used to extract input features for the t-SNE algorithm. The code used can be found
+[here](https://gist.github.com/erikdf/cd3431885df9e715fe376c6bbc869054).
 
 The benchmark compares the [Rtsne](https://cran.r-project.org/web/packages/Rtsne/index.html) package
 which wraps the original C++ implementation of BH t-SNE and the cuda.tsne package.
