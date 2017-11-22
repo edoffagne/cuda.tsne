@@ -25,9 +25,9 @@ This part is performed in C++ (with only one core).
 
 ## Benchmark
 
-The MNSIT dataset has been used for the benchmark. The dataset is available on the website from
-[Yann Lecun](http://yann.lecun.com/exdb/mnist/).
-The dataset contains pixel value for 60,000 images of handwritten digits.  
+[The Street View House Numbers (SVHN) Dataset](http://ufldl.stanford.edu/housenumbers/) has been used for the benchmark.
+The dataset contains 73,257 images (32x32 RGB) obtained from house numbers in Google Street View images. 
+A convolutional network has been used to extract input features for the t-SNE algorithm.
 
 The benchmark compares the [Rtsne](https://cran.r-project.org/web/packages/Rtsne/index.html) package
 which wraps the original C++ implementation of BH t-SNE and the cuda.tsne package.
@@ -41,32 +41,12 @@ and 12GiB of GPU memory).
 
 | Step               | Rtsne       | cuda.tsne    |
 | ------------------ | ----------- |-------------:|
-| Building tree      | 3332.55 sec | 104.88 sec   |
-| Learning embedding | 1163.07 sec | 796.73 sec   |
-| Total              | 4641.9 sec  | 937.120 sec  |
+| Building tree      | 3370 sec    | 237 sec      |
+| Learning embedding | 1315 sec    | 1604 sec     |
+| Total              | 4685 sec    | 1841 sec     |
 
-The following parameters used: number of dimensions=2, perplexity=30, theta=0.5, eta=200, exageration=12 
+The following parameters used: number of dimensions=2, perplexity=50, theta=0.5, eta=200, exageration=12 
 and iterations=1000.
-
-Below the code that has been used for the benchmark:
-
-```r
-require(cuda.tsne)
-require(Rtsne)
-load("data/train.RData")
-
-cat("Applying PCA\n")
-pca = prcomp(trainData, retx=TRUE, center = TRUE, scale. = TRUE)
-data = pca$x
-data = as.matrix(data)
-
-system.time(y <- tsne(data, 2, 30))
-system.time(y <- Rtsne(data, pca = FALSE, verbose=TRUE))
-```
-
-Note: in this example, all the principal components have been used for
-computing the t-SNE. In real life applications,
-t would be advised to reduce this number and keep for instance the first 50.
 
 ## Installation
 
@@ -92,6 +72,11 @@ Install Accelerate.
 ```shell
 $ conda install accelerate
 ```
+
+```shell
+$ R -e "devtools::install_github('erikdf/cuda.tsne')"
+```
+
 
 ## References 
 
