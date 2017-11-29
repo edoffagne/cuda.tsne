@@ -5,6 +5,7 @@
 
 #define CUB_STDERR
 
+#include<R.h>
 #include <math.h>
 #include <float.h>
 #include <stdlib.h>
@@ -24,14 +25,14 @@ void TSNE::run(double* sorted_distances, int* sorted_indices, int N, int no_dims
 
 	setbuf(stdout, NULL);
 	//setvbuf(stdout, NULL, _IONBF, 1024);
-        printf("Perplexity ( = %i)\n", perplexity);
-        printf("N ( = %i)\n", N);
+        Rprintf("Perplexity ( = %i)\n", perplexity);
+        Rprintf("N ( = %i)\n", N);
 	// Determine whether we are using an exact algorithm
 	if (N - 1 < 3 * perplexity) {
-		printf("Perplexity ( = %i) too large for the number of data points (%i)!\n", perplexity, N);
+		Rprintf("Perplexity ( = %i) too large for the number of data points (%i)!\n", perplexity, N);
 		exit(1);
 	}
-	if (verbose > 0) printf("Using no_dims = %d, perplexity = %d, learning rate = %f, exageration = %f and theta = %f\n", no_dims, perplexity, eta, exageration, theta);
+	if (verbose > 0) Rprintf("Using no_dims = %d, perplexity = %d, learning rate = %f, exageration = %f and theta = %f\n", no_dims, perplexity, eta, exageration, theta);
 
 
 
@@ -51,20 +52,20 @@ void TSNE::run(double* sorted_distances, int* sorted_indices, int N, int no_dims
 	double* dY = (double*)malloc(N * no_dims * sizeof(double));
 	double* uY = (double*)malloc(N * no_dims * sizeof(double));
 	double* gains = (double*)malloc(N * no_dims * sizeof(double));
-	if (dY == NULL || uY == NULL || gains == NULL) { printf("Memory allocation failed on dY or uY or gains malloc\n"); exit(1); }
+	if (dY == NULL || uY == NULL || gains == NULL) { Rprintf("Memory allocation failed on dY or uY or gains malloc\n"); exit(1); }
 	for (int i = 0; i < N * no_dims; i++)    uY[i] = .0;
 	for (int i = 0; i < N * no_dims; i++) gains[i] = 1.0;
 
 
 	double* cur_P = (double*)malloc((N - 1) * sizeof(double));
-	if (cur_P == NULL) { printf("Memory allocation failed on cur_P malloc\n"); exit(1); }
+	if (cur_P == NULL) { Rprintf("Memory allocation failed on cur_P malloc\n"); exit(1); }
 
 	start = clock();
-	if (verbose > 0) printf("\nComputing Gaussian perplexities...\n");
+	if (verbose > 0) Rprintf("\nComputing Gaussian perplexities...\n");
 	computeGaussianPerplexity(sorted_distances, sorted_indices, N, K, perplexity, &row_P, &col_P, &val_P);  // computing all distances
 
 	// Symmetrize input similarities
-	if (verbose > 0) printf("\nSymmetrizing sparce perplexity matirx...\n");
+	if (verbose > 0) Rprintf("\nSymmetrizing sparce perplexity matirx...\n");
 	symmetrizeMatrix(&row_P, &col_P, &val_P, N);
 	double sum_P = .0;
 	for (int i = 0; i < row_P[N]; i++) sum_P += val_P[i];
@@ -79,9 +80,9 @@ void TSNE::run(double* sorted_distances, int* sorted_indices, int N, int no_dims
 
 
 	// Perform main training loop
-	if (verbose > 0) printf("\nLearning embedding...\n");
+	if (verbose > 0) Rprintf("\nLearning embedding...\n");
 	for (int iter = 0; iter < max_iter; iter++) {
-                //printf("%i\n", iter);
+                //Rprintf("%i\n", iter);
 		// Compute (approximate) gradient
 		computeGradient(row_P, col_P, val_P, Y, N, no_dims, dY, theta);
 
@@ -109,11 +110,11 @@ void TSNE::run(double* sorted_distances, int* sorted_indices, int N, int no_dims
 			double C = .0;
 			C = evaluateError(row_P, col_P, val_P, Y, N, no_dims, theta);  // doing approximate computation here!
 			if (iter == 0) {
-				if (verbose > 1) printf("Iteration %d: error is %f\n", iter + 1, C);
+				if (verbose > 1) Rprintf("Iteration %d: error is %f\n", iter + 1, C);
 			}
 			else {
 				total_time += (float)(end - start) / CLOCKS_PER_SEC;
-				if (verbose > 1) printf("Iteration %d: error is %f (50 iterations in %4.2f seconds)\n", iter, C, (float)(end - start) / CLOCKS_PER_SEC);
+				if (verbose > 1) Rprintf("Iteration %d: error is %f (50 iterations in %4.2f seconds)\n", iter, C, (float)(end - start) / CLOCKS_PER_SEC);
 			}
 			start = clock();
 		}
@@ -129,7 +130,7 @@ void TSNE::run(double* sorted_distances, int* sorted_indices, int N, int no_dims
 	free(col_P); col_P = NULL;
 	free(val_P); val_P = NULL;
 
-	if (verbose > 0) printf("Fitting performed in %4.2f seconds.\n", total_time);
+	if (verbose > 0) Rprintf("Fitting performed in %4.2f seconds.\n", total_time);
 }
 
 
@@ -141,12 +142,12 @@ void TSNE::computeGaussianPerplexity(double* sorted_distances, int* sorted_indic
 	*_row_P = (int*)malloc((N + 1) * sizeof(int));
 	*_col_P = (int*)calloc(N * K, sizeof(int));
 	*_val_P = (double*)calloc(N * K, sizeof(double));
-	if (*_row_P == NULL || *_col_P == NULL || *_val_P == NULL) { printf("Memory allocation failed on _row_P or _col_P or _val_P malloc\n"); exit(1); }
+	if (*_row_P == NULL || *_col_P == NULL || *_val_P == NULL) { Rprintf("Memory allocation failed on _row_P or _col_P or _val_P malloc\n"); exit(1); }
 	int* row_P = *_row_P;
 	int* col_P = *_col_P;
 	double* val_P = *_val_P;
 	double* cur_P = (double*)malloc((N - 1) * sizeof(double));
-	if (cur_P == NULL) { printf("Memory allocation failed on cur_P malloc in comuteCaussianPerplexity\n"); exit(1); }
+	if (cur_P == NULL) { Rprintf("Memory allocation failed on cur_P malloc in comuteCaussianPerplexity\n"); exit(1); }
 	row_P[0] = 0;
 	for (int n = 0; n < N; n++) row_P[n + 1] = row_P[n] + (int)(K - 1);
 
@@ -238,7 +239,7 @@ void TSNE::computeGradient(int* _row_P, int* _col_P, double* inp_val_P, double* 
 	double sum_Q = .0;
 	double* pos_f = (double*)calloc(N * D, sizeof(double));
 	double* neg_f = (double*)calloc(N * D, sizeof(double));
-	if (pos_f == NULL || neg_f == NULL) { printf("Memory allocation failed on pos_f or neg_f malloc\n"); exit(1); }
+	if (pos_f == NULL || neg_f == NULL) { Rprintf("Memory allocation failed on pos_f or neg_f malloc\n"); exit(1); }
 
 	unsigned int* inp_row_P = reinterpret_cast<unsigned int*>(_row_P);
 	unsigned int* inp_col_P = reinterpret_cast<unsigned int*>(_col_P);
@@ -296,7 +297,7 @@ void TSNE::symmetrizeMatrix(int** _row_P, int** _col_P, double** _val_P, int N) 
 
 	// Count number of elements and row counts of symmetric matrix
 	int* row_counts = (int*)calloc(N, sizeof(int));
-	if (row_counts == NULL) { printf("Memory allocation failed  on row_counts malloc\n"); exit(1); }
+	if (row_counts == NULL) { Rprintf("Memory allocation failed  on row_counts malloc\n"); exit(1); }
 	for (int n = 0; n < N; n++) {
 		for (int i = row_P[n]; i < row_P[n + 1]; i++) {
 
@@ -319,7 +320,7 @@ void TSNE::symmetrizeMatrix(int** _row_P, int** _col_P, double** _val_P, int N) 
 	int* sym_row_P = (int*)malloc((N + 1) * sizeof(int));
 	int* sym_col_P = (int*)malloc(no_elem * sizeof(int));
 	double* sym_val_P = (double*)malloc(no_elem * sizeof(double));
-	if (sym_row_P == NULL || sym_col_P == NULL || sym_val_P == NULL) { printf("Memory allocation failed on sym_row_P or sym_col_P or sym_val_P malloc\n"); exit(1); }
+	if (sym_row_P == NULL || sym_col_P == NULL || sym_val_P == NULL) { Rprintf("Memory allocation failed on sym_row_P or sym_col_P or sym_val_P malloc\n"); exit(1); }
 
 	// Construct new row indices for symmetric matrix
 	sym_row_P[0] = 0;
@@ -327,7 +328,7 @@ void TSNE::symmetrizeMatrix(int** _row_P, int** _col_P, double** _val_P, int N) 
 
 	// Fill the result matrix
 	int* offset = (int*)calloc(N, sizeof(int));
-	if (offset == NULL) { printf("Memory allocation failed on offset malloc\n"); exit(1); }
+	if (offset == NULL) { Rprintf("Memory allocation failed on offset malloc\n"); exit(1); }
 	for (int n = 0; n < N; n++) {
 		for (int i = row_P[n]; i < row_P[n + 1]; i++) {                                  // considering element(n, col_P[i])
 
@@ -382,7 +383,7 @@ void TSNE::zeroMean(double* X, int N, int D) {
 
 	// Compute data mean
 	double* mean = (double*)calloc(D, sizeof(double));
-	if (mean == NULL) { printf("Memory allocation failed on mean malloc\n"); exit(1); }
+	if (mean == NULL) { Rprintf("Memory allocation failed on mean malloc\n"); exit(1); }
 	int nD = 0;
 	for (int n = 0; n < N; n++) {
 		for (int d = 0; d < D; d++) {
