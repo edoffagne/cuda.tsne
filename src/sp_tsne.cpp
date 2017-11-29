@@ -419,8 +419,8 @@ void TSNE::normalize(double* X, int N, int D) {
 double TSNE::randn() {
 	double x, y, radius;
 	do {
-		x = 2 * (rand() / ((double)RAND_MAX + 1)) - 1;
-		y = 2 * (rand() / ((double)RAND_MAX + 1)) - 1;
+		x = 2 * unif_rand() - 1;
+		y = 2 * unif_rand() - 1;
 		radius = (x * x) + (y * y);
 	} while ((radius >= 1.0) || (radius == 0.0));
 	radius = sqrt(-2 * log(radius) / radius);
