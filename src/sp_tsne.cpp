@@ -65,7 +65,7 @@ void TSNE::run(double* sorted_distances, int* sorted_indices, int N, int no_dims
 	computeGaussianPerplexity(sorted_distances, sorted_indices, N, K, perplexity, &row_P, &col_P, &val_P);  // computing all distances
 
 	// Symmetrize input similarities
-	if (verbose > 0) Rprintf("\nSymmetrizing sparce perplexity matirx...\n");
+	if (verbose > 0) Rprintf("\nSymmetrizing sparse perplexity matrix...\n");
 	symmetrizeMatrix(&row_P, &col_P, &val_P, N);
 	double sum_P = .0;
 	for (int i = 0; i < row_P[N]; i++) sum_P += val_P[i];
@@ -372,7 +372,7 @@ void TSNE::symmetrizeMatrix(int** _row_P, int** _col_P, double** _val_P, int N) 
 	free(*_col_P); *_col_P = sym_col_P;
 	free(*_val_P); *_val_P = sym_val_P;
 
-	// Free up some memery
+	// Free up some memory
 	free(offset); offset = NULL;
 	free(row_counts); row_counts = NULL;
 }
