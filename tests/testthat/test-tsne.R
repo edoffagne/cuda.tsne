@@ -1,7 +1,7 @@
 source("utils.R")
 
 test_that('t-SNE returns expected results', {
-
+  skip_if_no_accelerate()
   set.seed(123)
   iris_unique = unique(iris) 
   iris_matrix = as.matrix(iris_unique[,1:4])
