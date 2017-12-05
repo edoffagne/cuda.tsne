@@ -8,7 +8,7 @@ test_that('t-SNE returns expected results', {
   Y = tsne(iris_matrix)
   expect_equal(Y[1,1], 16.74606, tolerance = 0.00001)
   expect_equal(Y[1,2], 0.1206355, tolerance = 0.00001)
-  expect_equal(ncol(Y), 1)
+  expect_equal(ncol(Y), 2)
   expect_equal(nrow(Y), 149) 
 })
 
