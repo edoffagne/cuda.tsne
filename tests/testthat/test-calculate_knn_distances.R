@@ -10,7 +10,9 @@ test_that('calculate_knn_distances returns expected results', {
                             verbose=FALSE)
 
   expect_equal(length(d), 3)
-
+  expect_equal(length(d[[1]]), 13559)
+  expect_equal(length(d[[2]]), 13559)
+  expect_equal(d[[3]], 91)
 })
 
 
