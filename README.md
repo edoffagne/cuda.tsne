@@ -75,7 +75,7 @@ $ conda install accelerate
 ```
 
 ```shell
-$ R -e "devtools::install_github('erikdf/cuda.tsne')"
+$ R -e "devtools::install_github('edoffagne/cuda.tsne')"
 ```
 
 
