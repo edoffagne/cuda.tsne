@@ -1,4 +1,34 @@
 
+#' t-Distributed Stochastic Neighbor Embedding
+#'
+#' Wrapper for a CUDA implementation of Barnes-Hut t-Distributed Stochastic Neighbor Embedding (t-SNE).
+#' t-SNE is a technique for dimensionality reduction that is particularly well suited for the
+#' visualization of high-dimensional datasets.
+#'
+#'
+#' @usage tsne(data, no_dims=2, perplexity=30, theta=0.5, eta=200, exageration=12,
+#'             iterations=1000, verbose=FALSE)
+#'
+#' @param data A matrix
+#' @param no_dims Output dimensionality
+#' @param perplexity Perplexity parameter
+#' @param theta Speed vs accuracy trade-off
+#' @param eta Learning rate
+#' @param exageration exageration parameter
+#' @param iterations Number of iterations
+#' @param verbose Whether progress updates should be printed
+#'
+#' @return A matrix containing the new representations for the data
+#' @references Maaten, L. Van Der, 2014. Accelerating t-SNE using Tree-Based Algorithms.
+#'             Journal of Machine Learning Research, 15, p.3221-3245.
+#'
+#'             van der Maaten, L.J.P. & Hinton, G.E., 2008. Visualizing
+#'             High-Dimensional Data Using t-SNE. Journal of Machine Learning
+#'             Research, 9, pp.2579-2605.
+#' @rdname tsne
+#' @export
+
+
 tsne = function(data, no_dims=2, perplexity=30, theta=0.5, eta=200, exageration=12,
                iterations=1000, verbose=FALSE)
 { 
