@@ -27,7 +27,8 @@
 #'             Research, 9, pp.2579-2605.
 #' @rdname tsne
 #' @export
-
+#' @useDynLib cuda.tsne
+#' @import reticulate
 
 tsne = function(data, no_dims=2, perplexity=30, theta=0.5, eta=200, exageration=12,
                iterations=1000, verbose=FALSE)
